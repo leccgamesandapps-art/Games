@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+    
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <button id="rock-button">Rock</button>
+  <button id="paper-button">Paper</button>
+  <button id="scissors-button">Scissors</button>
+  <p id="result"></p>
+  
+  <script>
+    var choices = ['Rock', 'Paper', 'Scissors'];
+    
+    document.getElementById('rock-button').addEventListener('click', function() {
+      playGame('Rock');
+    });
+    
+    document.getElementById('paper-button').addEventListener('click', function() {
+      playGame('Paper');
+    });
+    
+    document.getElementById('scissors-button').addEventListener('click', function() {
+      playGame('Scissors');
+    });
+    
+    function playGame(playerChoice) {
+      var computerChoice = choices[Math.floor(Math.random() * choices.length)];
+      var result;
+      
+      if (playerChoice === computerChoice) {
+        result = 'Draw!';
+      } else if ((playerChoice === 'Rock' && computerChoice === 'Scissors') ||
+                 (playerChoice === 'Paper' && computerChoice === 'Rock') ||
+                 (playerChoice === 'Scissors' && computerChoice === 'Paper')) {
+        result = 'You Win!';
+      } else {
+        result = 'You Lose!';
+      }
+      
+      document.getElementById('result').innerText = `You chose ${playerChoice}, computer chose ${computerChoice}. ${result}`;
+    }
+  </script>
+</body>
+</html>

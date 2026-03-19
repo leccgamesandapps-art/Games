@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Roller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #dice {
+      font-size: 48px;
+      margin: 20px;
+    }
+    #total-number {
+      font-size: 24px;
+    }
+    #modes {
+      margin-top: 20px;
+    }
+    #choices {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #up-button {
+      background-color: #0f0;
+    }
+    #same-button {
+      background-color: #00f;
+    }
+    #down-button {
+      background-color: #f00;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dice Roller</h1>
+  <p id="total-roll">Roll 1 - 0 roll</p>
+  <p id="dice"></p>
+  <p id="total-number"></p>
+  <div id="modes">
+    <select id="num-dice">
+      <option value="1">1 Dice</option>
+      <option value="2">2 Dice</option>
+      <option value="3">3 Dice</option>
+      <option value="4">4 Dice</option>
+      <option value="5">5 Dice</option>
+      <option value="6">6 Dice</option>
+      <option value="7">7 Dice</option>
+      <option value="8">8 Dice</option>
+      <option value="9">9 Dice</option>
+      <option value="10">10 Dice</option>
+    </select>
+  </div>
+  <div id="choices">
+    <button id="up-button">Up</button>
+    <button id="same-button">Same</button>
+    <button id="down-button">Down</button>
+  </div>
+  <button id="roll-button" disabled>Roll Dice</button>
+  <p id="stats"></p>
+  <script>
+    let numDice;
+    let choice;
+    let previousTotal = 0;
+    let rollCount = 1;
+    let totalRoll = 0;
+
+    document.getElementById('up-button').addEventListener('click', function() {
+      choice = 'up';
+      document.getElementById('roll-button').disabled = false;
+      document.getElementById('stats').innerText = '';
+    });
+
+    document.getElementById('same-button').addEventListener('click', function() {
+      choice = 'same';
+      document.getElementById('roll-button').disabled = false;
+      document.getElementById('stats').innerText = '';
+    });
+
+    document.getElementById('down-button').addEventListener('click', function() {
+      choice = 'down';
+      document.getElementById('roll-button').disabled = false;
+      document.getElementById('stats').innerText = '';
+    });
+
+    document.getElementById('roll-button').addEventListener('click', function() {
+      if (!choice) {
+        document.getElementById('stats').innerText = 'Pick up, same, or down before rolling the dice';
+        return;
+      }
+      numDice = parseInt(document.getElementById('num-dice').value);
+      rollDice(numDice);
+    });
+
+    function rollDice(numDice) {
+      let rolls = [];
+      for (let i = 0; i < numDice; i++) {
+        rolls.push(Math.floor(Math.random() * 6) + 1);
+      }
+      let total = rolls.reduce((a, b) => a + b, 0);
+      document.getElementById('dice').innerText = rolls.join(', ');
+      document.getElementById('total-number').innerText = 'Total: ' + total;
+      totalRoll += total;
+      document.getElementById('total-roll').innerText = `Roll ${rollCount} - ${totalRoll - total} roll - ${totalRoll}`;
+      let result;
+      if (rollCount === 1) {
+        previousTotal = total;
+        if (choice === 'up') {
+          document.getElementById('stats').innerText = total + ' > ' + total + ' (Lose)';
+        } else if (choice === 'same') {
+          document.getElementById('stats').innerText = total + ' = ' + total + ' (Win)';
+        } else if (choice === 'down') {
+          document.getElementById('stats').innerText = total + ' < ' + total + ' (Lose)';
+        }
+        document.getElementById('roll-button').disabled = true;
+      } else {
+        if (choice === 'up' && total > previousTotal) {
+          result = 'Win';
+        } else if (choice === 'same' && total === previousTotal) {
+          result = 'Win';
+        } else if (choice === 'down' && total < previousTotal) {
+          result = 'Win';
+        } else {
+          result = 'Lose';
+        }
+        if (previousTotal === total) {
+          document.getElementById('stats').innerText = `Total: ${previousTotal} = ${total} (${result})`;
+        } else if (previousTotal < total) {
+          document.getElementById('stats').innerText = `Total: ${previousTotal} < ${total} (${result})`;
+        } else if (previousTotal > total) {
+          document.getElementById('stats').innerText = `Total: ${previousTotal} > ${total} (${result})`;
+        }
+        previousTotal = total;
+        choice = null;
+        document.getElementById('roll-button').disabled = true;
+      }
+      rollCount++;
+    }
+  </script>
+</body>
+</html>
