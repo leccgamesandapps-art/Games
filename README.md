@@ -2,7 +2,6 @@
 All LEGames List
 Created By
 # LEGameStudio
-Owner - t.me/RealLECC
-
-Link:
-# t.me/RealLECC
+Owner - LECC
+Link Profile:
+t.me/RealLECC
